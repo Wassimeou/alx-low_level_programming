@@ -1,4 +1,5 @@
 #include "hash_tables.h"
+#include <stdbool.h>
 
 /**
  * hash_tables_delete - deletes a hash table
