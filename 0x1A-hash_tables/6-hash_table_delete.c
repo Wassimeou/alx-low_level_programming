@@ -6,7 +6,7 @@
  * @ht: hash table to have memory freed
  */
 
-void hash_table_delete(hash_table_t *ht);
+void hash_table_delete(hash_table_t *ht)
 {
 	unsigned long int index, j;
 	hash_node_t *head = NULL, *temp = NULL;
