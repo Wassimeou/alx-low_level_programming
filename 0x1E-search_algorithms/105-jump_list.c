@@ -1,50 +1,53 @@
 #include "search_algos.h"
-#include <math.h>
 
 /**
- * jump_list - searches for a value in an array of
- * integers using the Jump search algorithm
+ * jump_list - searches for a value in a sorted list of integers
  *
- * @list: input list
- * @size: size of the array
- * @value: value to search in
- * Return: index of the number
+ * @list: a pointer to the head of the list to search in
+ * @size: the number of nodes in list
+ * @value: the value to search for
+ *
+ * Return: a pointer to the first node where value is located or NULL
  */
+
 listint_t *jump_list(listint_t *list, size_t size, int value)
 {
-	size_t index, k, m;
-	listint_t *prev;
+	size_t jmp, i;
+	listint_t *cur, *prev;
 
-	if (list == NULL || size == 0)
+	if (!list || size == 0)
 		return (NULL);
 
-	m = (size_t)sqrt((double)size);
-	index = 0;
-	k = 0;
+	jmp = sqrt(size);
+	cur = list;
 
-	do {
-		prev = list;
-		k++;
-		index = k * m;
-
-		while (list->next && list->index < index)
-			list = list->next;
-
-		if (list->next == NULL && index != list->index)
-			index = list->index;
-
-		printf("Value checked at index [%d] = [%d]\n", (int)index, list->n);
-
-	} while (index < size && list->next && list->n < value);
-
-	printf("Value found between indexes ");
-	printf("[%d] and [%d]\n", (int)prev->index, (int)list->index);
-
-	for (; prev && prev->index <= list->index; prev = prev->next)
+	while (cur->n < value && cur->next)
 	{
-		printf("Value checked at index [%d] = [%d]\n", (int)prev->index, prev->n);
-		if (prev->n == value)
-			return (prev);
+		prev = cur;
+		i = 0;
+		while (cur->next && i < jmp)
+		{
+			cur = cur->next;
+			i++;
+		}
+		printf("Value checked at index [%lu] = [%d]\n", cur->index, cur->n);
+	}
+	printf("Value found between indexes [%lu] and [%lu]\n", prev->index,
+	       cur->index);
+
+	cur = prev;
+	while (cur->n < value)
+	{
+		printf("Value checked at index [%lu] = [%d]\n", cur->index, cur->n);
+		if (cur->next)
+			cur = cur->next;
+		else
+			return (NULL);
+	}
+	if (cur->n == value)
+	{
+		printf("Value checked at index [%lu] = [%d]\n", cur->index, cur->n);
+		return (cur);
 	}
 
 	return (NULL);
